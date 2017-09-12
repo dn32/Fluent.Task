@@ -60,6 +60,10 @@ namespace Fluent.Task
             {
                 this.DateTime = DateTime.Now;
             }
+            else
+            {
+                this.DateTime = DateTime.Now.Add(TimeSpan.FromSeconds(seconds));
+            }
 
             this.FrequencyOfLoop = TimeSpan.FromSeconds(seconds);
             return this;

@@ -8,9 +8,8 @@ namespace Fluent.Task.Test
         const int PROCESSES_COUNT = 10000;
         static int previousSecond = 0;
 
-        private static void Operation(Schedule param)
+        private static void Operation(Schedule task)
         {
-            var task = param as Schedule;
             var delay = DateTime.Now.Subtract(task.DateTime).TotalSeconds;
             if (DateTime.Now.Second != previousSecond)
             {
@@ -30,12 +29,9 @@ namespace Fluent.Task.Test
                 int seconds = rnd.Next(60, 1200);
 
                 Schedule
-               .Instance()
-               .SetAction(Operation)
-               .SetName($"task-{Guid.NewGuid()}")
+               .Instance(Operation)
                .SetTime(seconds)
-               .SetLoop()
-               .Run(takService);
+               .RunLoop(takService);
 
                 if ((i + 1) % (PROCESSES_COUNT / 10) == 0)
                 {

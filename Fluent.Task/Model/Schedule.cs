@@ -16,15 +16,17 @@ namespace Fluent.Task
         private TimeSpan FrequencyOfLoop { get; set; }
 
         #endregion
-        
-        public static Schedule Instance()
+
+        public static Schedule Instance(Action<Schedule> action)
         {
-            return new Schedule();
+            return new Schedule(action);
         }
 
-        public Schedule()
+        public Schedule(Action<Schedule> action)
         {
+            Name = Guid.NewGuid().ToString();
             State = eStateOfTask.NOT_ADDED;
+            this.Action = action;
         }
 
         public Schedule SetName(string name)
@@ -53,12 +55,6 @@ namespace Fluent.Task
             return this;
         }
 
-        public Schedule SetLoop()
-        {
-            this.Loop = true;
-            return this;
-        }
-
         public Schedule Restart()
         {
             this.DateTime = DateTime.Now.Add(this.FrequencyOfLoop);
@@ -70,6 +66,12 @@ namespace Fluent.Task
         {
             taskService.Add(this);
             return this;
+        }
+
+        public Schedule RunLoop(TaskScheduler taskService)
+        {
+            this.Loop = true;
+            return Run(taskService);
         }
 
         public bool Validade(out string message)

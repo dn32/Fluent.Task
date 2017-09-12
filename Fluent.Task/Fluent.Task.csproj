@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
-    <Version>1.0.0-beta-1</Version>
+    <Version>1.0.0-beta-2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/dn32/Fluent.Task</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/dn32/Fluent.Task/blob/master/LICENSE</PackageLicenseUrl>

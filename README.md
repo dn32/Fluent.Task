@@ -6,25 +6,26 @@
 
 static void Operation(Schedule task)
 {
-    Console.WriteLine("Task executed!");
+    Console.WriteLine($"Task executed! parameter: {task.AditionalParameter} now is {DateTime.Now}");
 }
         
 static void Main(string[] args)
 {
-    var takService = TaskScheduler.Instance().Start();
-    
-    Schedule
-   .Instance(Operation)
-   .SetTime(seconds:2)
-   .RunLoop(takService);              
+    var taskScheduler = TaskScheduler.Instance().Start();
+    var aditionalParameter = DateTime.Now;
+
+     Schedule
+    .Instance(Operation)
+    .SetTime(seconds, startImmediately: true)
+    .SetAditionalParameter(aditionalParameter)
+    .Run(taskScheduler);            
 }  
 ```
 
 ```
-"Task executed!"
-"Task executed!"
-"Task executed!"
-"Task executed!"
-"Task executed!"
+"Task executed! parameter: 12/09/2017 07:22:03 now is 12/09/2017 07:22:09"
+"Task executed! parameter: 12/09/2017 07:22:03 now is 12/09/2017 07:22:11"
+"Task executed! parameter: 12/09/2017 07:22:03 now is 12/09/2017 07:22:13"
+"Task executed! parameter: 12/09/2017 07:22:03 now is 12/09/2017 07:22:15"
 ...
 ```

@@ -11,9 +11,8 @@ namespace Fluent.Task
         public string Name { get; private set; }
         public DateTime DateTime { get; private set; }
         public bool Loop { get; private set; }
-        public string Key { get; set; }
         public eStateOfTask State { get; set; }
-        public Object AditionalParameter { get; set; }
+        public Object AditionalParameter { get; private set; }
         private TimeSpan FrequencyOfLoop { get; set; }
 
         #endregion
@@ -36,6 +35,12 @@ namespace Fluent.Task
             return this;
         }
 
+        public Schedule SetAditionalParameter(object AditionalParameter)
+        {
+            this.AditionalParameter = AditionalParameter;
+            return this;
+        }
+
         public Schedule SetAction(Action<Schedule> action)
         {
             this.Action = action;
@@ -49,9 +54,13 @@ namespace Fluent.Task
             return this;
         }
 
-        public Schedule SetTime(int seconds)
+        public Schedule SetTime(int seconds, bool startImmediately = false)
         {
-            this.DateTime = DateTime.Now.AddSeconds(seconds);
+            if (startImmediately)
+            {
+                this.DateTime = DateTime.Now;
+            }
+
             this.FrequencyOfLoop = TimeSpan.FromSeconds(seconds);
             return this;
         }
@@ -82,11 +91,6 @@ namespace Fluent.Task
             if (this.DateTime == new DateTime())
             {
                 message += "dateTime is not defined\n";
-            }
-
-            if (this.DateTime <= DateTime.Now)
-            {
-                message += "time in the past is not accepted\n";
             }
 
             if (this.Action == null)

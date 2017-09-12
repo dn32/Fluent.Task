@@ -14,7 +14,7 @@ namespace Fluent.Task.Test
             if (DateTime.Now.Second != previousSecond)
             {
                 previousSecond = DateTime.Now.Second;
-                Console.WriteLine($"Delay {delay} {task.DateTime}");
+                Console.WriteLine($"Delay {delay} {task.DateTime} - {task.AditionalParameter}");
             }
         }
 
@@ -22,16 +22,19 @@ namespace Fluent.Task.Test
         {
             var rnd = new Random();
 
-            var takService = TaskScheduler.Instance().Start();
+            var taskScheduler = TaskScheduler.Instance().Start();
 
             for (int i = 0; i < PROCESSES_COUNT; i++)
             {
                 int seconds = rnd.Next(1, 100);
 
+                var aditionalParameter = DateTime.Now;
+
                 Schedule
                .Instance(Operation)
-               .SetTime(seconds)
-               .Run(takService);
+               .SetTime(seconds, startImmediately: true)
+               .SetAditionalParameter(aditionalParameter)
+               .Run(taskScheduler);
 
                 if ((i + 1) % (PROCESSES_COUNT / 10) == 0)
                 {
@@ -41,7 +44,7 @@ namespace Fluent.Task.Test
 
             while (true)
             {
-                Console.WriteLine(takService.Count() + " tasks");
+                Console.WriteLine(taskScheduler.Count() + " tasks");
                 Thread.Sleep(1000);
             }
         }

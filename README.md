@@ -15,7 +15,7 @@ static void Main(string[] args)
     
     Schedule
    .Instance(Operation)
-   .SetTime(2)
+   .SetTime(seconds:2)
    .RunLoop(takService);              
 }  
 ```

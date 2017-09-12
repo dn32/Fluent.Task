@@ -11,8 +11,9 @@ namespace Fluent.Task
     public class TaskScheduler
     {
         private List<Schedule> TaskList { get; set; }
-
+        private List<Thread> Threads { get; set; }
         private Thread Process { get; set; }
+        private bool FinalizeProcess { get; set; }
 
         public static TaskScheduler Instance()
         {
@@ -22,6 +23,7 @@ namespace Fluent.Task
         public TaskScheduler()
         {
             TaskList = new List<Schedule>();
+            Threads = new List<Thread>();
         }
 
         public TaskScheduler Add(Schedule task)
@@ -87,12 +89,17 @@ namespace Fluent.Task
         /// <returns></returns>
         public TaskScheduler Start(int clock = 100)
         {
+            if (FinalizeProcess)
+            {
+                throw new Exception("The process is finished.");
+            }
+
             if (clock < 10)
             {
                 clock = 10;
             }
 
-            if (Process != null && Process.IsAlive)
+            if (Process != null)
             {
                 return this;
             }
@@ -107,6 +114,11 @@ namespace Fluent.Task
         {
             while (true)
             {
+                if (FinalizeProcess)
+                {
+                    return;
+                }
+
                 var tasks = GetByTime(DateTime.Now);
                 if (tasks.Count == 0)
                 {
@@ -115,8 +127,15 @@ namespace Fluent.Task
 
                 Parallel.ForEach(tasks, task =>
                 {
+                    if (FinalizeProcess)
+                    {
+                        return;
+                    }
+
                     task.State = eStateOfTask.PROCESSING;
-                    new Thread(() => RunTask(task)).Start();
+                    var thread = new Thread(() => RunTask(task));
+                    Threads.Add(thread);
+                    thread.Start();
                 });
             }
         }
@@ -140,18 +159,14 @@ namespace Fluent.Task
                 Remove(task.Name);
             }
         }
-
         public TaskScheduler Stop()
         {
-            try
+            lock (TaskList)
             {
-                Process.Abort();
-            }
-            catch (Exception)
-            {
-                //Ignore
+                TaskList.Clear();
             }
 
+            FinalizeProcess = true;
             return this;
         }
 

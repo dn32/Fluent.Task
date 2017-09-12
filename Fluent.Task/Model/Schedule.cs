@@ -13,6 +13,7 @@ namespace Fluent.Task
         public bool Loop { get; private set; }
         public string Key { get; set; }
         public eStateOfTask State { get; set; }
+        public Object AditionalParameter { get; set; }
         private TimeSpan FrequencyOfLoop { get; set; }
 
         #endregion

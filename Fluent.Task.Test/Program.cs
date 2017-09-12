@@ -5,7 +5,7 @@ namespace Fluent.Task.Test
 {
     public class Program
     {
-        const int PROCESSES_COUNT = 10000;
+        const int PROCESSES_COUNT = 1000;
         static int previousSecond = 0;
 
         private static void Operation(Schedule task)
@@ -26,12 +26,12 @@ namespace Fluent.Task.Test
 
             for (int i = 0; i < PROCESSES_COUNT; i++)
             {
-                int seconds = rnd.Next(60, 1200);
+                int seconds = rnd.Next(1, 100);
 
                 Schedule
                .Instance(Operation)
                .SetTime(seconds)
-               .RunLoop(takService);
+               .Run(takService);
 
                 if ((i + 1) % (PROCESSES_COUNT / 10) == 0)
                 {
@@ -41,7 +41,7 @@ namespace Fluent.Task.Test
 
             while (true)
             {
-                Console.WriteLine(takService.RunninCount() + " running");
+                Console.WriteLine(takService.Count() + " tasks");
                 Thread.Sleep(1000);
             }
         }

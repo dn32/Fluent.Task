@@ -11,10 +11,9 @@ namespace Fluent.Task
     public class TaskScheduler
     {
         private List<Schedule> TaskList { get; set; }
-        private List<Thread> Threads { get; set; }
         private Thread Process { get; set; }
         private bool FinalizeProcess { get; set; }
-
+        
         public static TaskScheduler Instance()
         {
             return new TaskScheduler();
@@ -23,7 +22,6 @@ namespace Fluent.Task
         public TaskScheduler()
         {
             TaskList = new List<Schedule>();
-            Threads = new List<Thread>();
         }
 
         public TaskScheduler Add(Schedule task)
@@ -51,7 +49,7 @@ namespace Fluent.Task
         {
             lock (TaskList)
             {
-                return TaskList.Where(x => x.State == eStateOfTask.WAITING).OrderBy(x => x.DateTime).FirstOrDefault();
+                return TaskList.Where(x => x.State == eStateOfTask.WAITING).OrderBy(x => x.LoopSettings.DateTime).FirstOrDefault();
             }
         }
 
@@ -60,8 +58,8 @@ namespace Fluent.Task
             lock (TaskList)
             {
                 return TaskList
-                       .OrderBy(x => x.DateTime)
-                       .Where(x => x.State == eStateOfTask.WAITING && x.DateTime <= dateTime)
+                       .OrderBy(x => x.LoopSettings.DateTime)
+                       .Where(x => x.State == eStateOfTask.WAITING && x.LoopSettings.DateTime <= dateTime)
                        .ToList();
             }
         }
@@ -134,7 +132,6 @@ namespace Fluent.Task
 
                     task.State = eStateOfTask.PROCESSING;
                     var thread = new Thread(() => RunTask(task));
-                    Threads.Add(thread);
                     thread.Start();
                 });
             }
@@ -149,7 +146,7 @@ namespace Fluent.Task
         {
             task.State = eStateOfTask.RUNNING;
             task.Action(task);
-            if (task.Loop)
+            if (task.LoopSettings.FrequencyType == eFrequencyType.BY_INTERVAL)
             {
                 task.Restart();
             }
@@ -159,6 +156,7 @@ namespace Fluent.Task
                 Remove(task.Name);
             }
         }
+
         public TaskScheduler Stop()
         {
             lock (TaskList)

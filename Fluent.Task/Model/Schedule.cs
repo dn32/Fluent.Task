@@ -1,4 +1,5 @@
 ﻿using Fluent.Task.Enum;
+using Fluent.Task.Model;
 using System;
 
 namespace Fluent.Task
@@ -9,11 +10,9 @@ namespace Fluent.Task
 
         public Action<Schedule> Action { get; private set; }
         public string Name { get; private set; }
-        public DateTime DateTime { get; private set; }
-        public bool Loop { get; private set; }
         public eStateOfTask State { get; set; }
         public Object AditionalParameter { get; private set; }
-        private TimeSpan FrequencyOfLoop { get; set; }
+        public TimeSettings LoopSettings { get; set; }
 
         #endregion
 
@@ -24,9 +23,10 @@ namespace Fluent.Task
 
         public Schedule(Action<Schedule> action)
         {
-            Name = Guid.NewGuid().ToString();
-            State = eStateOfTask.NOT_ADDED;
+            this.Name = Guid.NewGuid().ToString();
+            this.State = eStateOfTask.NOT_ADDED;
             this.Action = action;
+            this.LoopSettings = new TimeSettings { FrequencyType = eFrequencyType.NULL };
         }
 
         public Schedule SetName(string name)
@@ -35,9 +35,9 @@ namespace Fluent.Task
             return this;
         }
 
-        public Schedule SetAditionalParameter(object AditionalParameter)
+        public Schedule SetAditionalParameter(object aditionalParameter)
         {
-            this.AditionalParameter = AditionalParameter;
+            this.AditionalParameter = aditionalParameter;
             return this;
         }
 
@@ -47,44 +47,79 @@ namespace Fluent.Task
             return this;
         }
 
-        public Schedule SetTime(TimeSpan dateTime)
+        public Schedule SetTimeWeekly(DayOfWeek dayOfTheWeeky)
         {
-            this.DateTime = DateTime.Now.Add(dateTime);
-            this.FrequencyOfLoop = dateTime;
+            this.LoopSettings.FrequencyType = eFrequencyType.WEEKLY;
+            this.LoopSettings.DayOfTheWeeky = dayOfTheWeeky;
             return this;
         }
 
-        public Schedule SetTime(int seconds, bool startImmediately = false)
+        public Schedule SetTimeMonthly(int month)
         {
-            if (startImmediately)
-            {
-                this.DateTime = DateTime.Now;
-            }
-            else
-            {
-                this.DateTime = DateTime.Now.Add(TimeSpan.FromSeconds(seconds));
-            }
+            this.LoopSettings.Month = month;
+            return this;
+        }
 
-            this.FrequencyOfLoop = TimeSpan.FromSeconds(seconds);
+        public Schedule SetTimeDay(int day)
+        {
+            this.LoopSettings.Day = day;
+            return this;
+        }
+
+        public Schedule SetTimeHour(int hour)
+        {
+            this.LoopSettings.Hour = hour;
+            return this;
+        }
+
+        public Schedule SetTimeMinute(int minute)
+        {
+            this.LoopSettings.Minute = minute;
+            return this;
+        }
+
+        public Schedule SetTimeSecond(int second)
+        {
+            this.LoopSettings.Second = second;
+            return this;
+        }
+
+        public Schedule SetStartImmediately()
+        {
+            this.LoopSettings.StartImmediately = true;
             return this;
         }
 
         public Schedule Restart()
         {
-            this.DateTime = DateTime.Now.Add(this.FrequencyOfLoop);
+            this.LoopSettings.Calculate();
             this.State = eStateOfTask.WAITING;
+            return this;
+        }
+
+        public Schedule SetFrequencyTime(TimeSpan time)
+        {
+            this.LoopSettings.FrequencyType = eFrequencyType.BY_INTERVAL;
+            this.LoopSettings.FrequencyOfLoop = time;
+            return this;
+        }
+
+        public Schedule SetFrequencyTime(int seconds)
+        {
+            this.LoopSettings.FrequencyType = eFrequencyType.BY_INTERVAL;
+            this.LoopSettings.FrequencyOfLoop = TimeSpan.FromSeconds(seconds);
             return this;
         }
 
         public Schedule Run(TaskScheduler taskService)
         {
+            this.LoopSettings.Calculate();
             taskService.Add(this);
             return this;
         }
 
         public Schedule RunLoop(TaskScheduler taskService)
         {
-            this.Loop = true;
             return Run(taskService);
         }
 
@@ -92,7 +127,7 @@ namespace Fluent.Task
         {
             message = string.Empty;
 
-            if (this.DateTime == new DateTime())
+            if (this.LoopSettings.DateTime == new DateTime())
             {
                 message += "dateTime is not defined\n";
             }

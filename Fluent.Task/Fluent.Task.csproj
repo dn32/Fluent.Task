@@ -5,13 +5,19 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
-    <Version>1.0.0-beta-5</Version>
+    <Version>1.0.0-beta-6</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/dn32/Fluent.Task</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/dn32/Fluent.Task/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/dn32/Fluent.Task</RepositoryUrl>
     <Description>Fluent Task Schedule</Description>
     <Copyright>dn32 Applications All rights reserved</Copyright>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Fluent.Task.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluent.DateTimeExtensions" Version="1.0.0-beta-01" />
+  </ItemGroup>
 
 </Project>

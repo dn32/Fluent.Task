@@ -8,20 +8,20 @@ namespace Fluent.Task
     {
         #region PROPERTIES
 
-        public Action<Schedule> Action { get; private set; }
+        public Action<object> Action { get; private set; }
         public string Name { get; private set; }
         public eStateOfTask State { get; set; }
-        public Object AditionalParameter { get; private set; }
+        public object Parameter { get; private set; }
         public TimeSettings LoopSettings { get; set; }
 
         #endregion
 
-        public static Schedule Instance(Action<Schedule> action)
+        public static Schedule Instance(Action<object> action)
         {
             return new Schedule(action);
         }
 
-        public Schedule(Action<Schedule> action)
+        public Schedule(Action<object> action)
         {
             this.Name = Guid.NewGuid().ToString();
             this.State = eStateOfTask.NOT_ADDED;
@@ -35,15 +35,27 @@ namespace Fluent.Task
             return this;
         }
 
-        public Schedule SetAditionalParameter(object aditionalParameter)
+        public Schedule SetParameter(object parameter)
         {
-            this.AditionalParameter = aditionalParameter;
+            this.Parameter = parameter;
             return this;
         }
 
-        public Schedule SetAction(Action<Schedule> action)
+        public Schedule SetAction(Action<object> action)
         {
             this.Action = action;
+            return this;
+        }
+
+        public Schedule SetDateTime(int month, int day = 0, int hour = 0, int minute = 0, int second = 0)
+        {
+            this.LoopSettings.SetDateTime(month, day, hour, minute, second);
+            return this;
+        }
+
+        public Schedule SetDateTime(DayOfWeek dayOfTheWeeky, int hour = 0, int minute = 0, int second = 0)
+        {
+            this.LoopSettings.SetDateTime(dayOfTheWeeky, hour, minute, second);
             return this;
         }
 
@@ -120,6 +132,7 @@ namespace Fluent.Task
 
         public Schedule RunLoop(TaskScheduler taskService)
         {
+            this.LoopSettings.IsLoop = true;
             return Run(taskService);
         }
 

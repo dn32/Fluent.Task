@@ -145,9 +145,10 @@ namespace Fluent.Task
         private void RunTask(Schedule task)
         {
             task.State = eStateOfTask.RUNNING;
-            task.Action(task);
-            if (task.LoopSettings.FrequencyType == eFrequencyType.BY_INTERVAL)
+            task.Action(task.Parameter);
+            if (task.LoopSettings.IsLoop)
             {
+                Thread.Sleep(1000); //You must wait at least 1 second to not schedule the task for the time you have just run.
                 task.Restart();
             }
             else

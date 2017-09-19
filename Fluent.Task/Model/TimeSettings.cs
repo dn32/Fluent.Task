@@ -1,4 +1,4 @@
-﻿using Fluent.DateTimeExtensions;
+﻿using Fluent.DateTimeExtensions.Core;
 using Fluent.Task.Enum;
 using System;
 using System.Collections.Generic;

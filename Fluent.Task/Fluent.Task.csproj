@@ -17,6 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Fluent.DateTimeExtensions.Core">
+      <HintPath>..\..\Fluent.NextDateTimeExtensions\Fluent.DateTimeExtensions.Core\bin\Debug\netcoreapp2.0\Fluent.DateTimeExtensions.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 

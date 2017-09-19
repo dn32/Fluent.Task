@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
-    <Version>1.0.0-beta-6</Version>
+    <Version>1.0.0-beta-7</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/dn32/Fluent.Task</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/dn32/Fluent.Task/blob/master/LICENSE</PackageLicenseUrl>
@@ -17,9 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Fluent.DateTimeExtensions.Core">
-      <HintPath>..\..\Fluent.NextDateTimeExtensions\Fluent.DateTimeExtensions.Core\bin\Debug\netcoreapp2.0\Fluent.DateTimeExtensions.Core.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Fluent.DateTimeExtensions" Version="1.0.0-beta-03" />
   </ItemGroup>
 
 </Project>

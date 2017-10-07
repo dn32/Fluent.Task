@@ -6,11 +6,13 @@ namespace Fluent.Task.Test
     {
         static void Main(string[] args)
         {
+            Console.WriteLine($"Now is {DateTime.Now}");
+
             var taskScheduler = TaskScheduler.Instance().Start();
 
             Schedule
              .Instance(ShowNow)
-             .SetFrequencyTime(1)
+             .SetFrequencyTime(10)
              .SetStartImmediately()
              .SetParameter("test parameter")
              .RunLoop(taskScheduler);

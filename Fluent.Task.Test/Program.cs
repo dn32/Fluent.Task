@@ -10,7 +10,7 @@ namespace Fluent.Task.Test
 
             Schedule
              .Instance(ShowNow)
-             .SetDateTime(DayOfWeek.Monday, hour: 8)
+             .SetFrequencyTime(1)
              .SetStartImmediately()
              .SetParameter("test parameter")
              .RunLoop(taskScheduler);

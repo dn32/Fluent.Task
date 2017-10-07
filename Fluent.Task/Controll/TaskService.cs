@@ -131,8 +131,7 @@ namespace Fluent.Task
                     }
 
                     task.State = eStateOfTask.PROCESSING;
-                    var thread = new Thread(() => RunTask(task));
-                    thread.Start();
+                    System.Threading.Tasks.Task.Factory.StartNew(() => RunTask(task));
                 });
             }
         }
@@ -148,7 +147,11 @@ namespace Fluent.Task
             task.Action(task.Parameter);
             if (task.LoopSettings.IsLoop)
             {
-                Thread.Sleep(1000); //You must wait at least 1 second to not schedule the task for the time you have just run.
+                if (task.LoopSettings.FrequencyOfLoop.TotalSeconds == 0)
+                {
+                    Thread.Sleep(1000); //You must wait at least 1 second to not schedule the task for the time you have just run.
+                }
+
                 task.Restart();
             }
             else

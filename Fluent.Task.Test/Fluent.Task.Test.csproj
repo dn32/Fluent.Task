@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluent.DateTimeExtensions" Version="1.0.0" />
+    <PackageReference Include="Fluent.DateTimeExtensions" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>

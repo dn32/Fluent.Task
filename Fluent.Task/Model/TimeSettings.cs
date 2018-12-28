@@ -1,8 +1,6 @@
-﻿using Fluent.DateTimeExtensions.Core;
+﻿using Fluent.DateTimeExtensions;
 using Fluent.Task.Enum;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fluent.Task.Model
 {

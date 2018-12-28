@@ -1,7 +1,6 @@
 ﻿using Fluent.Task.Enum;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -178,7 +177,7 @@ namespace Fluent.Task
         {
             if (!task.Validade(out string message))
             {
-                throw new ValidationException(message);
+                throw new Exception(message);
             }
 
             if (Get(task.Name) != null)

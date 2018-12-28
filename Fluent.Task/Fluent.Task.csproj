@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;netstandard2.0;net461;net45;net40</TargetFrameworks>
     <ApplicationIcon />
     <StartupObject />
-    <Version>1.0.0.3</Version>
+    <Version>2.0.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/dn32/Fluent.Task</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/dn32/Fluent.Task/blob/master/LICENSE</PackageLicenseUrl>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluent.DateTimeExtensions" Version="1.0.0" />
+    <PackageReference Include="Fluent.DateTimeExtensions" Version="2.0.2" />
   </ItemGroup>
 
 </Project>

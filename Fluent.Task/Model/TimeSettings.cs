@@ -57,7 +57,7 @@ namespace Fluent.Task.Model
             }
             else if (Month != null)
             {
-                DateTime = DateTime.Now.GetNextMoth(Month.Value, Day, Hour, Minute, Second);
+                DateTime = DateTime.Now.GetNextMonth(Month.Value, Day, Hour, Minute, Second);
             }
             else if (Day != null)
             {

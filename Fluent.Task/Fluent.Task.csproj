@@ -2,23 +2,31 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netcoreapp2.1;netstandard2.0;net461;net45;net40</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2;netstandard2.0;net461;net45;net40</TargetFrameworks>
     <ApplicationIcon />
     <StartupObject />
-    <Version>2.0.2</Version>
+    <Version>2.0.4</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/dn32/Fluent.Task</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/dn32/Fluent.Task/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/dn32/Fluent.Task</RepositoryUrl>
     <Description>Fluent Task Schedule</Description>
     <Copyright>dn32 Applications All rights reserved</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Fluent.Task.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.3</AssemblyVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluent.DateTimeExtensions" Version="2.0.2" />
+    <PackageReference Include="Fluent.DateTimeExtensions" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Multi.Threads\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

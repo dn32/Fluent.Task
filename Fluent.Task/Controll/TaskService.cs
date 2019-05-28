@@ -12,14 +12,19 @@ namespace Fluent.Task
         private List<Schedule> TaskList { get; set; }
         private Thread Process { get; set; }
         private bool FinalizeProcess { get; set; }
-        
+        private CancellationToken CancellationToken { get; set; }
+
         public static TaskScheduler Instance()
         {
             return new TaskScheduler();
         }
 
-        public TaskScheduler()
+        private TaskScheduler()
         {
+            var cts = new CancellationTokenSource();
+            CancellationToken = cts.Token;
+            AppDomain.CurrentDomain.ProcessExit += (object sender, EventArgs e) => { cts.Cancel(); };
+
             TaskList = new List<Schedule>();
         }
 
@@ -111,6 +116,11 @@ namespace Fluent.Task
         {
             while (true)
             {
+                if (CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 if (FinalizeProcess)
                 {
                     return;

@@ -104,7 +104,7 @@ namespace Fluent.Task
 
         public Schedule Restart()
         {
-            this.LoopSettings.Calculate();
+            this.LoopSettings.Calculate(this);
             this.State = eStateOfTask.WAITING;
             return this;
         }
@@ -125,7 +125,7 @@ namespace Fluent.Task
 
         public Schedule Run(TaskScheduler taskService)
         {
-            this.LoopSettings.Calculate();
+            this.LoopSettings.Calculate(this);
             taskService.Add(this);
             return this;
         }

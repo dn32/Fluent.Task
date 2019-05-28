@@ -38,7 +38,7 @@ namespace Fluent.Task.Model
             return this;
         }
 
-        internal void Calculate()
+        internal void Calculate(Schedule schedule)
         {
             if (StartImmediately)
             {
@@ -77,7 +77,7 @@ namespace Fluent.Task.Model
             }
 
 #if DEBUG
-            Console.WriteLine($"Schedule added for {DateTime}");
+            Console.WriteLine($"Schedule '{schedule.Name}' added for {DateTime}");
 #endif
         }
     }

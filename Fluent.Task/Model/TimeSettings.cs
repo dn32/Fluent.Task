@@ -1,8 +1,8 @@
 ﻿using Fluent.DateTimeExtensions;
-using Fluent.Task.Enum;
+using FluentTask.Enum;
 using System;
 
-namespace Fluent.Task.Model
+namespace FluentTask.Model
 {
     public class TimeSettings
     {

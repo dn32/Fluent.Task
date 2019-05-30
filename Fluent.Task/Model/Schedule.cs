@@ -1,8 +1,8 @@
-﻿using Fluent.Task.Enum;
-using Fluent.Task.Model;
+﻿using FluentTask.Enum;
+using FluentTask.Model;
 using System;
 
-namespace Fluent.Task
+namespace FluentTask
 {
     public class Schedule
     {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Fluent.Task.Enum
+﻿
+namespace FluentTask.Enum
 {
     public enum eStateOfTask
     {

@@ -1,11 +1,11 @@
-﻿using Fluent.Task.Enum;
+﻿using FluentTask.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Fluent.Task
+namespace FluentTask
 {
     public class TaskScheduler
     {
@@ -129,7 +129,7 @@ namespace Fluent.Task
                 var tasks = GetByTime(DateTime.Now);
                 if (tasks.Count == 0)
                 {
-                    Thread.Sleep(clock);
+                    Task.Delay(clock, CancellationToken).Wait();
                 }
 
                 Parallel.ForEach(tasks, task =>
@@ -140,7 +140,7 @@ namespace Fluent.Task
                     }
 
                     task.State = eStateOfTask.PROCESSING;
-                    System.Threading.Tasks.Task.Factory.StartNew(() => RunTask(task));
+                    Task.Factory.StartNew(() => RunTask(task));
                 });
             }
         }
@@ -158,7 +158,7 @@ namespace Fluent.Task
             {
                 if (task.LoopSettings.FrequencyType != eFrequencyType.BY_INTERVAL && !task.LoopSettings.StartImmediately)
                 {
-                    Thread.Sleep(1000); //You must wait at least 1 second to not schedule the task for the time you have just run.
+                    Task.Delay(1000, CancellationToken).Wait(); //You must wait at least 1 second to not schedule the task for the time you have just run.
                 }
 
                 task.Restart();

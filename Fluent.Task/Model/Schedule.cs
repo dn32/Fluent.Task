@@ -9,6 +9,7 @@ namespace FluentTask
         #region PROPERTIES
 
         public Action<object> Action { get; private set; }
+        public Action<Exception> ExceptionCallBack { get; private set; }
         public string Name { get; private set; }
         public eStateOfTask State { get; set; }
         public object Parameter { get; private set; }
@@ -44,6 +45,12 @@ namespace FluentTask
         public Schedule SetAction(Action<object> action)
         {
             this.Action = action;
+            return this;
+        }
+
+        public Schedule SetExceptionCallBack(Action<Exception> exceptionCallBack)
+        {
+            this.ExceptionCallBack = exceptionCallBack;
             return this;
         }
 

@@ -153,7 +153,21 @@ namespace FluentTask
         private void RunTask(Schedule task)
         {
             task.State = eStateOfTask.RUNNING;
-            task.Action(task.Parameter);
+
+            try
+            {
+                task.Action(task.Parameter);
+            }
+            catch (Exception ex)
+            {
+                if(task.ExceptionCallBack == null)
+                {
+                    throw ex;
+                }
+
+                task.ExceptionCallBack(ex);
+            }
+
             if (task.LoopSettings.IsLoop)
             {
                 if (task.LoopSettings.FrequencyType != eFrequencyType.BY_INTERVAL && !task.LoopSettings.StartImmediately)

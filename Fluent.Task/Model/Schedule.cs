@@ -14,6 +14,7 @@ namespace FluentTask
         public eStateOfTask State { get; set; }
         public object Parameter { get; private set; }
         public TimeSettings LoopSettings { get; set; }
+        public bool IsDebugger { get; private set; }
 
         #endregion
 
@@ -45,6 +46,12 @@ namespace FluentTask
         public Schedule SetAction(Action<object> action)
         {
             this.Action = action;
+            return this;
+        }
+
+        public Schedule SetIsDebugger()
+        {
+            this.IsDebugger = true;
             return this;
         }
 

@@ -76,9 +76,10 @@ namespace FluentTask.Model
                 DateTime = DateTime.Now.GetNextSecond(Second.Value);
             }
 
-#if DEBUG
-            Console.WriteLine($"Schedule '{schedule.Name}' added for {DateTime}");
-#endif
+            if (schedule.IsDebugger)
+            {
+                Console.WriteLine($"Schedule '{schedule.Name}' added for {DateTime}");
+            }
         }
     }
 }

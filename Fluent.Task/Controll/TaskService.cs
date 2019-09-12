@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace FluentTask
 {
-    public class TaskScheduler
+    public class TaskScheduler : IDisposable
     {
         private List<Schedule> TaskList { get; set; }
         private Thread Process { get; set; }
         private bool FinalizeProcess { get; set; }
         private CancellationToken CancellationToken { get; set; }
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         public static TaskScheduler Instance()
         {
@@ -21,10 +22,8 @@ namespace FluentTask
 
         private TaskScheduler()
         {
-            var cts = new CancellationTokenSource();
-            CancellationToken = cts.Token;
-            AppDomain.CurrentDomain.ProcessExit += (object sender, EventArgs e) => { cts.Cancel(); };
-
+            CancellationTokenSource = new CancellationTokenSource();
+            CancellationToken = CancellationTokenSource.Token;
             TaskList = new List<Schedule>();
         }
 
@@ -116,10 +115,7 @@ namespace FluentTask
         {
             while (true)
             {
-                if (CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
+                if (CancellationToken.IsCancellationRequested) { return; }
 
                 if (FinalizeProcess)
                 {
@@ -129,11 +125,14 @@ namespace FluentTask
                 var tasks = GetByTime(DateTime.Now);
                 if (tasks.Count == 0)
                 {
-                    Task.Delay(clock, CancellationToken).Wait();
+                    if (CancellationToken.IsCancellationRequested) { return; }
+                    Task.Delay(clock).Wait();
                 }
 
                 Parallel.ForEach(tasks, task =>
                 {
+                    if (CancellationToken.IsCancellationRequested) { return; }
+
                     if (FinalizeProcess)
                     {
                         return;
@@ -156,11 +155,11 @@ namespace FluentTask
 
             try
             {
-                task.Action(task.Parameter);
+               task.Action(task.Parameter);
             }
             catch (Exception ex)
             {
-                if(task.ExceptionCallBack == null)
+                if (task.ExceptionCallBack == null)
                 {
                     throw ex;
                 }
@@ -172,8 +171,10 @@ namespace FluentTask
             {
                 if (task.LoopSettings.FrequencyType != eFrequencyType.BY_INTERVAL && !task.LoopSettings.StartImmediately)
                 {
-                    Task.Delay(1000, CancellationToken).Wait(); //You must wait at least 1 second to not schedule the task for the time you have just run.
+                    Task.Delay(1000).Wait(); //You must wait at least 1 second to not schedule the task for the time you have just run.
                 }
+
+                if (CancellationToken.IsCancellationRequested) { return; }
 
                 task.Restart();
             }
@@ -208,6 +209,12 @@ namespace FluentTask
             {
                 throw new DuplicateWaitObjectException(task.Name, $"A task with this name already exists {task.Name}");
             }
+        }
+
+        public void Dispose()
+        {
+            CancellationTokenSource.Cancel();
+            Stop();
         }
 
         #endregion

@@ -15,15 +15,14 @@ namespace FluentTask
         private CancellationToken CancellationToken { get; set; }
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public static TaskScheduler Instance()
+        public static TaskScheduler Instance(CancellationToken cancellationToken)
         {
-            return new TaskScheduler();
+            return new TaskScheduler(cancellationToken);
         }
 
-        private TaskScheduler()
+        private TaskScheduler(CancellationToken cancellationToken)
         {
-            CancellationTokenSource = new CancellationTokenSource();
-            CancellationToken = CancellationTokenSource.Token;
+            CancellationToken = cancellationToken;
             TaskList = new List<Schedule>();
         }
 
@@ -213,7 +212,7 @@ namespace FluentTask
 
         public void Dispose()
         {
-            CancellationTokenSource.Cancel();
+            CancellationTokenSource?.Cancel();
             Stop();
         }
 

@@ -19,7 +19,12 @@ namespace FluentTask
         {
             return new TaskScheduler(cancellationToken);
         }
-
+        
+        public static TaskScheduler Instance()
+        {
+            return new TaskScheduler(new CancellationTokenSource().Token);
+        }
+        
         private TaskScheduler(CancellationToken cancellationToken)
         {
             CancellationToken = cancellationToken;
